@@ -78,6 +78,12 @@ uintptr_t minheap_peek(Minheap* m)
 void minheap_pop(Minheap* m)
 {
 	m->length -= sizeof(uintptr_t);
+	
+	if (m->length == 0)
+	{
+		return;
+	}
+	
 	char* this = &m->arena[m->length];
 	UP(&m->arena[0]) = UP(this);
 	this = (char*) &m->arena[0];
@@ -89,9 +95,26 @@ void minheap_pop(Minheap* m)
 	
 	while (this < last)
 	{
-		char* left = 2*((this - first)/sizeof(uintptr_t)) + sizeof(uintptr_t) + first;
-		char* right = 2*((this - first)/sizeof(uintptr_t)) + 2*sizeof(uintptr_t) + first;
-		char* min = UP(left) < UP(right) ? left : right;
+		char* left = 2*((this - first)) + sizeof(uintptr_t) + first;
+		
+		if (left > last)
+		{
+			break;
+		}
+		
+		char* right = 2*((this - first)) + 2*sizeof(uintptr_t) + first;
+		
+		char* min;
+		
+		if (right > last)
+		{
+			min = left;
+		}
+		
+		else
+		{
+			min = UP(left) < UP(right) ? left : right;
+		}
 		
 		if (UP(min) < value)
 		{
@@ -116,26 +139,27 @@ int main()
 	
 	minheap_insert(&m, 4);
 	minheap_insert(&m, 3);
+	minheap_insert(&m, 6);
 	minheap_insert(&m, 8);
+	minheap_insert(&m, 2);
 	minheap_insert(&m, 7);
 	minheap_insert(&m, 5);
 	minheap_insert(&m, 1);
 	
 	fprintf(stderr, "got: 0x%08lX\n", minheap_peek(&m));
 	minheap_pop(&m);
-	
 	fprintf(stderr, "got: 0x%08lX\n", minheap_peek(&m));
 	minheap_pop(&m);
-	
 	fprintf(stderr, "got: 0x%08lX\n", minheap_peek(&m));
 	minheap_pop(&m);
-	
 	fprintf(stderr, "got: 0x%08lX\n", minheap_peek(&m));
 	minheap_pop(&m);
-	
 	fprintf(stderr, "got: 0x%08lX\n", minheap_peek(&m));
 	minheap_pop(&m);
-	
+	fprintf(stderr, "got: 0x%08lX\n", minheap_peek(&m));
+	minheap_pop(&m);
+	fprintf(stderr, "got: 0x%08lX\n", minheap_peek(&m));
+	minheap_pop(&m);
 	fprintf(stderr, "got: 0x%08lX\n", minheap_peek(&m));
 	minheap_pop(&m);
 	
