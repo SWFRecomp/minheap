@@ -79,7 +79,7 @@ void minheap_pop(Minheap* m)
 {
 	m->length -= sizeof(uintptr_t);
 	
-	if (m->length == 0)
+	if (UNLIKELY(m->length == 0))
 	{
 		return;
 	}
@@ -97,7 +97,7 @@ void minheap_pop(Minheap* m)
 	{
 		char* left = 2*((this - first)) + sizeof(uintptr_t) + first;
 		
-		if (left > last)
+		if (UNLIKELY(left > last))
 		{
 			break;
 		}
@@ -106,7 +106,7 @@ void minheap_pop(Minheap* m)
 		
 		char* min;
 		
-		if (right > last)
+		if (UNLIKELY(right > last))
 		{
 			min = left;
 		}
