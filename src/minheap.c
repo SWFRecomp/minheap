@@ -10,7 +10,6 @@
 
 #define VAL(type, x) *((type*) x)
 #define UP(x) VAL(uintptr_t, x)
-#define UPADDR(x) ((uintptr_t*) &x)
 
 #define ENSURE_SIZE(ptr, new_size, capac, elem_size) \
 	if (UNLIKELY(new_size >= capac)) \
