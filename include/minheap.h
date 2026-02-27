@@ -4,8 +4,6 @@
 
 typedef struct
 {
-	uintptr_t value;
-	
 	char* restrict arena;
 	size_t length;
 	size_t arena_capacity;
